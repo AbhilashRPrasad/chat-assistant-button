@@ -141,7 +141,6 @@ const ChatAssistant = () => {
 
   return (
     <>
-      <div>hello</div>
       <ChatButton
         onClick={handleOpen}
         aria-label="Open chat assistant"
