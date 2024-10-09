@@ -25,14 +25,6 @@ const mountChatWidget = () => {
   }
 };
 
-// Expose the function globally
+// Expose the function globally and call it
 window.mountChatWidget = mountChatWidget;
-
-// Optionally, render the ChatAssistant directly in the main app (if desired)
-const rootElement = document.getElementById("root");
-const root = createRoot(rootElement);
-root.render(
-  <StrictMode>
-    <ChatAssistant />
-  </StrictMode>
-);
+mountChatWidget();  // Automatically invoke the function
