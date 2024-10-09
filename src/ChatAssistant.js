@@ -5,7 +5,7 @@ import {
   IconButton,
   TextField,
   Typography,
-  Modal,
+  Popover,
   Paper,
   styled,
 } from "@mui/material";
@@ -29,17 +29,11 @@ const ChatButton = styled(Button)(({ theme }) => ({
   transition: "all 0.3s ease-in-out",
 }));
 
-// Styled modal for the chat window
-const ChatModal = styled(Modal)({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-});
-
 // Styled paper for chat window layout
 const ChatWindow = styled(Paper)(({ theme }) => ({
   width: "100%",
-  maxWidth: 400,
+  maxWidth: 350,
+  width: 350,
   height: "80vh",
   maxHeight: 400,
   display: "flex",
@@ -96,18 +90,23 @@ const ChatInput = styled(Box)(({ theme }) => ({
 }));
 
 const ChatAssistant = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); // State for controlling the popover
   const [messages, setMessages] = useState([
     { text: "Hello! How can I assist you today?", isUser: false },
   ]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
-  // Open chat modal
-  const handleOpen = () => setIsOpen(true);
+  // Open chat popover
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget); // Set the anchor element (button) for popover positioning
+  };
 
-  // Close chat modal
-  const handleClose = () => setIsOpen(false);
+  // Close chat popover
+  const handleClose = () => {
+    setAnchorEl(null);
+    setMessages([]);
+  };
 
   // Send message when "Send" button is clicked
   const handleSend = () => {
@@ -139,6 +138,9 @@ const ChatAssistant = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const open = Boolean(anchorEl);
+  const id = open ? "chat-popover" : undefined;
+
   return (
     <>
       <ChatButton
@@ -148,14 +150,25 @@ const ChatAssistant = () => {
       >
         <FaComment />
       </ChatButton>
-      <ChatModal
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="chat-modal-title"
+
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => {}} // Override onClose to do nothing
+        disableRestoreFocus // Prevents focus from being restored to the previous element
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
       >
         <ChatWindow>
           <ChatHeader>
-            <Typography variant="h6" id="chat-modal-title">
+            <Typography variant="h6" id="chat-popover-title">
               Chat Assistant
             </Typography>
             <IconButton
@@ -194,7 +207,7 @@ const ChatAssistant = () => {
             </IconButton>
           </ChatInput>
         </ChatWindow>
-      </ChatModal>
+      </Popover>
     </>
   );
 };
