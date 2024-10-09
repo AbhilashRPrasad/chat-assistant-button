@@ -26,7 +26,7 @@ const mountChatWidget = () => {
 };
 
 // Expose the function globally and call it when the DOM is fully loaded
-window.mountChatWidget = mountChatWidget;
+// window.mountChatWidget = mountChatWidget;
 
 // Ensure the function is called when the document is ready
 document.addEventListener("DOMContentLoaded", mountChatWidget);
